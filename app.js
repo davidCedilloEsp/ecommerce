@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var detalleRouter = require('./routes/detalle');
 
 var app = express();
 
@@ -21,11 +22,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/detalle',detalleRouter);//manda a llamar la variable 'detalleRouter' cuando se escriba localhosto:puerto/detalle dentro de la barras de busqueda
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
+//cachar error 404
+app.use((req, res)=>{
+  res.status(404);
+  res.render('errors/404.pug',{detalle:'Upss...'})
+})
+
+//cachar error 500
+app.use((error, req, res, next)=>{
+  res.status(404);
+  res.render('errors/500.pug',{detalle:'valo madr...'})
+})
+
 
 // error handler
 app.use(function(err, req, res, next) {
